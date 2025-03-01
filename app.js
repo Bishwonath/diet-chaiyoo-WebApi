@@ -34,6 +34,7 @@ const UserRouter = require('./routes/UserRoute');
 const AuthRouter = require('./routes/AuthRoute');
 const UserPreferenceRouter = require('./routes/UserPreferenceRoute');
 const app = express();
+app.use(express.json()); // Middleware to parse JSON bodies
 
 
 

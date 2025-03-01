@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userPreferencesSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true, unique: true }, // ✅ Ensure 1 entry per user
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true, unique: true }, 
     healthGoal: { type: String, required: true },
     dietaryPreference: { type: String, required: true },
     weeklyBudget: { type: Number, required: true },
@@ -11,5 +11,4 @@ const userPreferencesSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const UserPreferences = mongoose.model('UserPreferences', userPreferencesSchema);
-
 module.exports = UserPreferences;
