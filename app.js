@@ -32,8 +32,10 @@ const path = require('path');
 const connectDB = require('./config/db');
 const UserRouter = require('./routes/UserRoute');
 const AuthRouter = require('./routes/AuthRoute');
-
+const UserPreferenceRouter = require('./routes/UserPreferenceRoute');
 const app = express();
+
+
 
 // Connect to the database
 connectDB();
@@ -47,6 +49,9 @@ app.use('/pages', express.static(path.join(__dirname, '/frontend/pages')));
 // Define API routes
 app.use('/api/user', UserRouter);
 app.use('/api/auth', AuthRouter);
+app.use('/api/preferences', UserPreferenceRouter);
+
+console.log("User preferences route loaded");
 
 // Define a root route to serve the login page
 app.get('/', (req, res) => {

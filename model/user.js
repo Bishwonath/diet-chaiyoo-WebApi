@@ -23,7 +23,8 @@ const userSchema =new mongoose.Schema({
     password:{
         type:String,
         require:true
-    }
+    },
+    hasSetPreferences: { type: Boolean, default: false }
 
 });
 

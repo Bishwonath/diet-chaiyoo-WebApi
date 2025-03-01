@@ -3,12 +3,13 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = "4fb876242331584a793776ad67394d0ee00290f140fd9ab047456d54fdff0bd1";
 const Credential = require("../model/credential")
 const user = require('../model/user')
+const UserPreferences = require('../model/UserPreferences'); // Import the model
 
 
 const register = async (req, res) => {
     try {
         const { username, password, role } = req.body;
-        console.log(req.body)
+        console.log(req.body);
 
         // Validate input
         if (!password) {
@@ -20,15 +21,10 @@ const register = async (req, res) => {
 
         // Save user details
         const userData = { ...req.body, password: hashedPassword };
-        console.log(user)
-        const newuser = new user(userData);
-        await newuser.save();
+        const newUser = new user(userData);
+        await newUser.save();  // Save the new user
 
-        // Save credentials separately
-        // const cred = new Credential({ username, password: hashedPassword, role });
-        // await cred.save();
-
-        res.status(201);
+        res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
         console.error("Registration Error:", error);
         res.status(500).json({ error: "Internal server error" });
@@ -60,17 +56,26 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { username: cred.username, role: cred.role },
+            { username: cred.username, role: cred.role, userId: cred._id }, // Include userId in token
             SECRET_KEY,
             { expiresIn: '1h' }
         );
 
-        res.status(200).json({ token, message: "Login successful" });
+        // Check if the user has set preferences
+        const preferences = await UserPreferences.findOne({ userId: cred._id });
+
+        if (!preferences) {
+            return res.status(200).json({ token, isFirstTime: true, message: "Please set your preferences" });
+        } else {
+            return res.status(200).json({ token, message: "Login successful" });
+        }
+
     } catch (error) {
-        console.error("Login Error:", error);
+        console.error(error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
 
 
 module.exports = {
