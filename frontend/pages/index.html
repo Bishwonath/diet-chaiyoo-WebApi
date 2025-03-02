@@ -1,159 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .delivered-main { padding: 20px; }
-    .navbar { background-color: #f8f9fa; }
-    .navbar-brand img { height: 50px; }
-    .food-delivered img { height: 100px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <section class="delivered-main">
-    <div class="container">
-      <!-- Header and Navigation -->
-      <nav class="navbar navbar-light navbar-expand-xl">
-        <a href="/" class="navbar-brand">
-          <img src="logo.png" alt="Logo" class="img-fluid">
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navCollapse">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="login.html" class="nav-link">Login</a>
-            </li>
-            <li class="nav-item">
-              <a href="register.html" class="nav-link">Sign Up</a>
-            </li>
-          </ul>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header Section -->
+    <header class="flex justify-between items-center bg-white p-6 shadow-md w-full">
+        <img src="images/logo.png" alt="Logo" class="h-16">
+        <div class="flex items-center">
+            <div id="username" class="text-xl font-bold cursor-pointer bg-gray-200 p-2 rounded-full mr-4">Loading...</div>
+            <!-- Sign Out Button -->
+            <button id="signOutButton" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 focus:outline-none">
+                Sign Out
+            </button>
         </div>
-      </nav>
+    </header>
+    
 
-      <!-- Main Content -->
-      <div class="row">
-        <div class="col-md-6 col-xl-6 col-12">
-          <h1>Your Progress</h1>
-          <div id="userPreferences" class="mb-4">
-            <h3>User Preferences</h3>
-            <p><strong>Health Goal:</strong> <span id="healthGoal">Loading...</span></p>
-            <p><strong>Dietary Preference:</strong> <span id="dietaryPreference">Loading...</span></p>
-            <p><strong>Weekly Budget:</strong> $<span id="weeklyBudget">Loading...</span></p>
-            <p><strong>Age:</strong> <span id="age">Loading...</span></p>
-            <p><strong>Weight:</strong> <span id="weight">Loading...</span> kg</p>
-            <p><strong>Height:</strong> <span id="height">Loading...</span> cm</p>
-          </div>
-          <div>
-            <h4>Update Weekly Budget</h4>
-            <label for="budgetSlider">Weekly Budget: ₹</label>
-            <input type="range" id="budgetSlider" min="200" max="2000" step="100" value="200">
-            <span id="budgetValue">200</span> Rs
-            <button class="btn btn-primary" id="updateBudgetBtn">Update Budget</button>
-          </div>
-
-          <div class="row food-delivered">
-            <div class="col-xl-6 col-6">
-              <a href="#" class="text-center d-block">
-                <img src="food-delivery.png" alt="Get Food Delivered" class="img-fluid mb-2">
-                <h2>Get Food Recommendation</h2>
-              </a>
+    <!-- Main Content Section -->
+    <main class="flex-grow mt-8 container mx-auto p-4">
+        <h2 class="text-3xl font-bold mb-4">Your Diet Planner</h2>
+        <div class="flex flex-wrap justify-between">
+            <div class="w-full md:w-2/3 p-6 bg-white shadow-md rounded-md mb-4 md:mb-0">
+                <div class="flex items-center mb-4">
+                    <div class="text-2xl mr-2">🚚</div>
+                    <div>
+                        <p class="text-xl font-bold">Your health goal and Dietary Preference</p>
+                        <p id="userPreferenceDelivery">Loading...</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="text-2xl mr-2">🍽️</div>
+                    <div>
+                        <p class="text-xl font-bold">Your weekly Budget</p>
+                        <p id="userPreferenceDeals">Loading...</p>
+                    </div>
+                </div>
             </div>
-            <div class="col-xl-6 col-6">
-              <a href="#" class="text-center d-block">
-                <img src="grocery-delivery.png" alt="Get Grocery Delivered" class="img-fluid mb-2">
-                <h2>Go to Diet Community</h2>
-              </a>
-            </div>
-          </div>
+            <div id="preferenceImageContainer" class="w-full md:w-1/3 h-64 bg-cover bg-center rounded-md shadow-md"></div>
         </div>
-      </div>
+
+        <!-- Carousel Section -->
+     <div class="mt-8 relative">
+    <div class="flex justify-center w-full">
+        <div class="w-full h-[400px] max-w-full overflow-hidden relative">
+            <div id="carousel" class="flex transition-transform duration-300 ease-in-out w-full h-full">
+                <div class="w-full h-full flex-shrink-0">
+                    <img src="images/slide1.jpg" alt="Slide 1" class="w-full h-full object-cover rounded-md">
+                </div>
+                <div class="w-full h-full flex-shrink-0">
+                    <img src="images/slide2.jpg" alt="Slide 2" class="w-full h-full object-cover rounded-md">
+                </div>
+                <div class="w-full h-full flex-shrink-0">
+                    <img src="images/slide3.jpg" alt="Slide 3" class="w-full h-full object-cover rounded-md">
+                </div>
+            </div>
+
+            <!-- Carousel Navigation -->
+            <div class="absolute top-1/2 left-0 transform -translate-y-1/2 p-4">
+                <button id="prev" class="bg-gray-700 text-white p-2 rounded-full shadow-lg hover:bg-gray-800 focus:outline-none">
+                    &#10094;
+                </button>
+            </div>
+            <div class="absolute top-1/2 right-0 transform -translate-y-1/2 p-4">
+                <button id="next" class="bg-gray-700 text-white p-2 rounded-full shadow-lg hover:bg-gray-800 focus:outline-none">
+                    &#10095;
+                </button>
+            </div>
+        </div>
     </div>
-  </section>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-   document.addEventListener("DOMContentLoaded", async function () {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error("No token found. Redirecting to login.");
-    window.location.href = 'login.html'; // Redirect to login if no token
-    return;
-  }
+        
 
-  try {
-    const response = await fetch('http://localhost:3000/api/preferences', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
+    </main>
 
-    if (!response.ok) {
-      console.error("Error fetching preferences. Status:", response.status);
-      throw new Error(`Failed to fetch preferences: ${response.statusText}`);
-    }
+    <!-- Footer Section -->
+    <footer class="bg-[#E07B39] text-white p-4">
+        <div class="flex flex-wrap justify-between items-center">
+            <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                <p class="text-lg font-bold">About Us</p>
+                <p>We provide the best food and grocery delivery services tailored to your preferences.</p>
+            </div>
+            <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                <p class="text-lg font-bold">Useful Links</p>
+                <ul>
+                    <li><a href="https://www.healthline.com/nutrition" class="text-white underline">Healthline Nutrition</a></li>
+                    <li><a href="https://www.eatright.org" class="text-white underline">Eat Right</a></li>
+                    <li><a href="https://www.nutrition.gov" class="text-white underline">Nutrition.gov</a></li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/3 text-center md:text-right">
+                <button id="logoutBtn" class="bg-red-500 p-2 rounded-md">Logout</button>
+            </div>
+        </div>
+    </footer>
 
-    const data = await response.json();
-    console.log("Received data:", data); // Debugging log
-
-    if (!data) {
-      throw new Error("No data received from the server.");
-    }
-
-    // Populate the user preferences section
-    document.getElementById("healthGoal").textContent = data.healthGoal || "N/A";
-    document.getElementById("dietaryPreference").textContent = data.dietaryPreference || "N/A";
-    document.getElementById("weeklyBudget").textContent = data.weeklyBudget || "N/A";
-    document.getElementById("age").textContent = data.age || "N/A";
-    document.getElementById("weight").textContent = data.weight || "N/A";
-    document.getElementById("height").textContent = data.height || "N/A";
-
-    // Initialize the slider with the current weekly budget value
-    const budgetSlider = document.getElementById('budgetSlider');
-    const budgetValue = document.getElementById('budgetValue');
-    budgetSlider.value = data.weeklyBudget || 200; // Default to 200 if no value found
-    budgetValue.textContent = budgetSlider.value; // Show initial value
-
-    // Update displayed value when slider is moved
-    budgetSlider.addEventListener('input', function () {
-      budgetValue.textContent = budgetSlider.value + ' Rs'; // Update displayed value
-    });
-
-    // Handle the budget update
-    document.getElementById('updateBudgetBtn').addEventListener('click', async () => {
-      const updatedBudget = budgetSlider.value;
-
-      // Update the budget in the database
-      const updateResponse = await fetch('http://localhost:3000/api/preferences', {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ weeklyBudget: parseInt(updatedBudget, 10) }), // Ensure it's a number
-      });
-
-      if (updateResponse.ok) {
-        alert("Budget updated successfully!");
-      } else {
-        const errorData = await updateResponse.json();
-        console.error("Error response:", errorData); // Log the error response
-        alert("Failed to update budget.");
-      }
-    });
-
-  } catch (error) {
-    console.error("Error loading preferences:", error);
-    alert('Something went wrong while loading preferences.');
-  }
+    <script>
+        document.getElementById("signOutButton").addEventListener("click", function() {
+    // Redirect to the login page
+    window.location.href = "login.html";  // Change "login.html" to your login page's URL
 });
 
-  </script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("No token found. Redirecting to login.");
+                window.location.href = 'login.html';
+                return;
+            }
+    
+            try {
+                const userResponse = await fetch('http://localhost:3000/api/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                if (!userResponse.ok) throw new Error(`Failed to fetch user data: ${userResponse.statusText}`);
+    
+                const userData = await userResponse.json();
+                if (!userData) throw new Error("No user data received from the server.");
+    
+                document.getElementById("username").textContent = userData.username || "Suvam";
+    
+                const preferencesResponse = await fetch('http://localhost:3000/api/preferences', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                if (!preferencesResponse.ok) throw new Error(`Failed to fetch preferences: ${preferencesResponse.statusText}`);
+    
+                const preferencesData = await preferencesResponse.json();
+                if (!preferencesData) throw new Error("No preferences data received from the server.");
+    
+                document.getElementById("userPreferenceDelivery").textContent = `Health Goal: ${preferencesData.healthGoal || "N/A"}, Dietary Preference: ${preferencesData.dietaryPreference || "N/A"}`;
+                document.getElementById("userPreferenceDeals").textContent = `Weekly Budget: ${preferencesData.weeklyBudget || "N/A"} Rs`;
+    
+                const preferenceImageContainer = document.getElementById('preferenceImageContainer');
+                let backgroundImage = '';
+    
+                if (preferencesData.healthGoal === "Stay Healthy") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        backgroundImage = "url('images/healthyveg.png')";
+                    } else {
+                        backgroundImage = "url('images/healthynonveg.png')";
+                    }
+                } else if (preferencesData.healthGoal === "Gain Weight") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        backgroundImage = "url('images/gainveg.png')";
+                    } else {
+                        backgroundImage = "url('images/gainnonveg.png')";
+                    }
+                } else if (preferencesData.healthGoal === "Lose Weight") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        backgroundImage = "url('images/loseveg.png')";
+                    } else {
+                        backgroundImage = "url('images/losenonveg.png')";
+                    }
+                }
+    
+                preferenceImageContainer.style.backgroundImage = backgroundImage;
+    
+                // **Set Carousel Images Based on User Preferences**
+                const carousel = document.getElementById('carousel');
+                let carouselImages = [];
+    
+                if (preferencesData.healthGoal === "Stay Healthy") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        carouselImages = ["images/healthyveg1.jpg", "images/healthyveg1.jpg", "images/healthyveg1.jpg"];
+                    } else {
+                        carouselImages = ["images/healthynonveg1.jpg", "images/healthynonveg2.jpg", "images/healthynonveg3.jpg"];
+                    }
+                } else if (preferencesData.healthGoal === "Gain Weight") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        carouselImages = ["images/gainveg1.jpeg", "images/gainveg1.jpeg", "images/gainveg1.jpeg"];
+                    } else {
+                        carouselImages = ["images/gainnonveg1.png", "images/gainnonveg2.jpg", "images/gainnonveg3.jpg"];
+                    }
+                } else if (preferencesData.healthGoal === "Lose Weight") {
+                    if (preferencesData.dietaryPreference === "Vegetarian") {
+                        carouselImages = ["images/loseveg1.jpg", "images/loseveg2.jpg", "images/loseveg3.jpg"];
+                    } else {
+                        carouselImages = ["images/losenonveg2.png", "images/losenonveg2.png", "images/losenonveg2.png"];
+                    }
+                }
+    
+                // **Generate Carousel Images Dynamically**
+                carousel.innerHTML = ""; // Clear previous images
+                carouselImages.forEach(imageSrc => {
+                    const slideDiv = document.createElement("div");
+                    slideDiv.className = "w-full flex-shrink-0";
+                    slideDiv.innerHTML = `<img src="${imageSrc}" alt="Slide" class="w-full h-auto object-cover rounded-md">`;
+                    carousel.appendChild(slideDiv);
+                });
+    
+                document.getElementById("username").addEventListener("click", function () {
+                    window.location.href = 'edit_preferences.html';
+                });
+    
+                document.getElementById("logoutBtn").addEventListener("click", function () {
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                });
+    
+            } catch (error) {
+                console.error("Error loading data:", error);
+                alert('Something went wrong while loading data.');
+            }
+        });
+    
+        // **Carousel Functionality**
+        let currentIndex = 0;
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            document.getElementById('carousel').style.transform = `translateX(${offset}%)`;
+        }
+    
+        document.getElementById('next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % document.querySelectorAll('#carousel > div').length;
+            updateCarousel();
+        });
+    
+        document.getElementById('prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + document.querySelectorAll('#carousel > div').length) % document.querySelectorAll('#carousel > div').length;
+            updateCarousel();
+        });
+    </script>
+    
 </body>
 </html>

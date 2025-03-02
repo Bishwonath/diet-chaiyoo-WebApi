@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header Section -->
+    <header class="flex justify-between items-center bg-white p-6 shadow-md w-full">
+        <img src="images/logo.png" alt="Logo" class="h-16 cursor-pointer" id="logo">
+        <div id="userInitials" class="text-xl font-bold cursor-pointer bg-gray-200 p-2 rounded-full">AB</div>
+    </header>
+
+    <main class="flex-grow mt-8 container mx-auto p-4">
+        <h2 class="text-3xl font-bold mb-4">Edit Your Preferences</h2>
+        <div class="bg-white p-6 shadow-md rounded-md">
+            <div class="mb-4">
+                <label for="healthGoal" class="block text-xl font-bold mb-2">What’s your primary health goal?</label>
+                <select class="w-full p-2 border rounded-md" id="healthGoal" required>
+                    <option value="">Select an option</option>
+                    <option value="Stay Healthy">Stay Healthy</option>
+                    <option value="Gain Weight">Gain Weight</option>
+                    <option value="Lose Weight">Lose Weight</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="dietaryPreference" class="block text-xl font-bold mb-2">What’s your dietary preference?</label>
+                <select class="w-full p-2 border rounded-md" id="dietaryPreference" required>
+                    <option value="">Select an option</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Non-Vegetarian">Non-Vegetarian</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="weeklyBudget" class="block text-xl font-bold mb-2">Weekly Budget</label>
+                <input type="number" class="w-full p-2 border rounded-md" id="weeklyBudget" required>
+            </div>
+            <button id="savePreferencesBtn" class="bg-blue-500 text-white p-2 rounded-md">Save Preferences</button>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-[#E07B39] text-white p-4">
+        <div class="flex flex-wrap justify-between items-center">
+            <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                <p class="text-lg font-bold">About Us</p>
+                <p>We provide the best food and grocery delivery services tailored to your preferences.</p>
+            </div>
+            <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                <p class="text-lg font-bold">Useful Links</p>
+                <ul>
+                    <li><a href="https://www.healthline.com/nutrition" class="text-white underline">Healthline Nutrition</a></li>
+                    <li><a href="https://www.eatright.org" class="text-white underline">Eat Right</a></li>
+                    <li><a href="https://www.nutrition.gov" class="text-white underline">Nutrition.gov</a></li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/3 text-center md:text-right">
+                <button id="logoutBtn" class="bg-red-500 p-2 rounded-md">Logout</button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error("No token found. Redirecting to login.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/preferences', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) throw new Error(`Failed to fetch preferences: ${response.statusText}`);
+
+                const data = await response.json();
+                if (!data) throw new Error("No data received from the server.");
+
+                // Populate form with existing preferences
+                document.getElementById("healthGoal").value = data.healthGoal || "";
+                document.getElementById("dietaryPreference").value = data.dietaryPreference || "";
+                document.getElementById("weeklyBudget").value = data.weeklyBudget || "";
+
+                // Set user initials
+                const userInitials = data.userInitials || "AB";
+                document.getElementById("userInitials").textContent = userInitials;
+
+                // Save preferences
+                document.getElementById("savePreferencesBtn").addEventListener("click", async () => {
+                    const updatedPreferences = {
+        healthGoal: document.getElementById("healthGoal").value.trim() || null,
+        dietaryPreference: document.getElementById("dietaryPreference").value.trim() || null,
+        weeklyBudget: isNaN(parseInt(document.getElementById("weeklyBudget").value, 10)) 
+            ? null 
+            : parseInt(document.getElementById("weeklyBudget").value, 10)
+    };
+
+                    const updateResponse = await fetch('http://localhost:3000/api/preferences', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedPreferences),
+                    });
+
+                    if (updateResponse.ok) {
+                        alert("Preferences updated successfully!");
+                    } else {
+                        alert("Failed to update preferences.");
+                    }
+                });
+
+                // Logout button
+                document.getElementById("logoutBtn").addEventListener("click", function () {
+                    localStorage.removeItem('token');
+                    window.location.href = 'login.html';
+                });
+
+                // Redirect to index page when clicking the logo
+                document.getElementById("logo").addEventListener("click", function () {
+                    window.location.href = 'index.html';
+                });
+
+            } catch (error) {
+                console.error("Error loading preferences:", error);
+                alert('Something went wrong while loading preferences.');
+            }
+        });
+    </script>
+</body>
+</html>

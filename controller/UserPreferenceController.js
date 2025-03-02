@@ -67,22 +67,35 @@ const getPreferences = async (req, res) => {
     }
 };
 
-// ✅ Function to update weekly budget (Fixed)
 const updatePreferences = async (req, res) => {
     try {
         console.log("Incoming request body:", req.body);  // Debugging log
-        const userId = authenticateUser(req);  // ✅ Extract userId correctly
-        const { weeklyBudget } = req.body;
 
-        // Ensure weeklyBudget is valid
-        if (typeof weeklyBudget !== 'number' || weeklyBudget <= 0) {
-            return res.status(400).json({ error: "Invalid weekly budget value" });
+        const userId = authenticateUser(req); // ✅ Extract userId correctly
+        const { weeklyBudget, healthGoal, dietaryPreference } = req.body;
+
+        // ✅ Create an update object dynamically
+        const updateFields = {};
+
+        if (typeof weeklyBudget === 'number' && weeklyBudget > 0) {
+            updateFields.weeklyBudget = weeklyBudget;
+        }
+        if (typeof healthGoal === 'string' && healthGoal.trim() !== "") {
+            updateFields.healthGoal = healthGoal.trim();
+        }
+        if (typeof dietaryPreference === 'string' && dietaryPreference.trim() !== "") {
+            updateFields.dietaryPreference = dietaryPreference.trim();
         }
 
-        // ✅ Use $set to update specific fields
+        // ✅ Ensure there's something to update
+        if (Object.keys(updateFields).length === 0) {
+            return res.status(400).json({ error: "No valid fields to update." });
+        }
+
+        // ✅ Use $set to update only provided fields
         const preferences = await UserPreferences.findOneAndUpdate(
             { userId },
-            { $set: { weeklyBudget } }, 
+            { $set: updateFields },
             { new: true } // ✅ Returns updated document
         );
 
@@ -90,12 +103,13 @@ const updatePreferences = async (req, res) => {
             return res.status(404).json({ error: "Preferences not found. Save preferences first." });
         }
 
-        res.status(200).json({ message: "Weekly budget updated successfully", preferences });
+        res.status(200).json({ message: "Preferences updated successfully", preferences });
     } catch (error) {
         console.error("Error updating preferences:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
+
 
 module.exports = {
     savePreferences,

@@ -58,6 +58,7 @@ console.log("User preferences route loaded");
 app.get('/', (req, res) => {
   res.redirect('/pages/login.html'); // Redirect to login page
 });
+app.use('/uploads', express.static('uploads'));
 
 // Define the port to listen on
 const port = process.env.PORT || 3000;
